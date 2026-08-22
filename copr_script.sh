@@ -225,4 +225,15 @@ sed --sandbox -i \
   -e "s/^# define buildid .*/%define buildid .secureblue.${secureblue_buildid_version}/" \
   kernel.spec
 
+# Merge trusted-keys/* into secureblue-certs.pem and get the spec to append it
+# to certs/rhel.pem alongside Fedora's keys, so they all end up in
+# CONFIG_SYSTEM_TRUSTED_KEYS and thus .builtin_trusted_keys.
+cat "${build_dir}"/trusted-keys/*.pem > secureblue-certs.pem
+sed --sandbox -i \
+  -e "/^Source4002: gating\.yaml\$/a Source4010: secureblue-certs.pem" \
+  kernel.spec
+sed --sandbox -i \
+  '\#^cat imaca\.pem >> \.\./certs/rhel\.pem$#a cat %{SOURCE4010} >> ../certs/rhel.pem' \
+  kernel.spec
+
 mv ./* "${build_dir}"
