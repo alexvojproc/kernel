@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright 2026 The Secureblue Authors
+#
+# SPDX-License-Identifier: MIT
+
+diff --git a/kernel.spec b/kernel.spec
+index 2e03403..59594fe 100644
+--- a/kernel.spec
++++ b/kernel.spec
+@@ -1214,6 +1214,7 @@ Source3002: Patchlist.changelog
+ Source4000: README.rst
+ Source4001: rpminspect.yaml
+ Source4002: gating.yaml
++Source4010: secureblue-certs.pem
+
+ ## Patches needed for building this package
+
+@@ -2313,6 +2314,7 @@ cat secureboot.pem >> ../certs/rhel.pem
+
+ openssl x509 -inform der -in %{ima_ca_cert} -out imaca.pem
+ cat imaca.pem >> ../certs/rhel.pem
++cat %{SOURCE4010} >> ../certs/rhel.pem
+
+ for i in *.config; do
+   sed -i 's@CONFIG_SYSTEM_TRUSTED_KEYS=""@CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"@' $i
