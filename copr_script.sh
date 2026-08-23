@@ -9,6 +9,9 @@ set -euxo pipefail
 build_dir="$(realpath ..)"
 readonly build_dir
 
+script_dir="$(pwd)"
+readonly script_dir
+
 git clone https://src.fedoraproject.org/rpms/kernel.git
 cd kernel
 git checkout f44
@@ -224,5 +227,12 @@ done
 sed --sandbox -i \
   -e "s/^# define buildid .*/%define buildid .secureblue.${secureblue_buildid_version}/" \
   kernel.spec
+
+# Merge trusted-keys/* into secureblue-certs.pem. This gets appended to
+# certs/rhel.pem alongside Fedora's keys (see trusted-keys.patch), so they
+# all end up in CONFIG_SYSTEM_TRUSTED_KEYS and thus .builtin_trusted_keys.
+cat "${build_dir}"/trusted-keys/*.pem > secureblue-certs.pem
+
+git apply "${script_dir}"/patches/*.patch
 
 mv ./* "${build_dir}"
