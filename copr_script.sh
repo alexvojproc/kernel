@@ -231,7 +231,7 @@ sed --sandbox -i \
 # Merge trusted-keys/* into secureblue-certs.pem. This gets appended to
 # certs/rhel.pem alongside Fedora's keys (see trusted-keys.patch), so they
 # all end up in CONFIG_SYSTEM_TRUSTED_KEYS and thus .builtin_trusted_keys.
-cat "${build_dir}"/trusted-keys/*.pem > secureblue-certs.pem
+cat "${script_dir}"/trusted-keys/*.pem > secureblue-certs.pem
 
 git apply "${script_dir}"/patches/*.patch
 
