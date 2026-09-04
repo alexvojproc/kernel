@@ -26,9 +26,18 @@ configs_to_enable=(
   # https://www.kernelconfig.io/CONFIG_PROC_PAGE_MONITOR
   # requires a value set since its parent gets disabled
   CONFIG_PROC_PAGE_MONITOR
+
+  # https://www.kernelconfig.io/CONFIG_CFI_CLANG
+  # Use Clang's Control Flow Integrity (CFI)
+  CONFIG_CFI_CLANG
 )
 
 configs_to_disable=(
+  # https://www.kernelconfig.io/CONFIG_CFI_AUTO_DEFAULT
+  # Do not attempt to use FineIBT by default at boot time - use kCFI instead.
+  # The former has a history of vulnerabilities.
+  CONFIG_CFI_AUTO_DEFAULT
+
   # https://www.kernelconfig.io/CONFIG_INFINIBAND
   # https://en.wikipedia.org/wiki/InfiniBand
   # InfiniBand support
